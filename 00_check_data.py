@@ -9,7 +9,7 @@ from variables.variables import *
 mkdir_path(workspace)
 
 def check_t1_svs(population, zfs, workspace, days):
-    for subject in test_population:
+    for subject in population:
         for day in days:
 
             # make dirs & def src dir
@@ -46,7 +46,7 @@ def check_t1_svs(population, zfs, workspace, days):
                                     str(os.path.join(nii_dir, 'Anatomical.nii')))
 
     # copy MRS data
-    for subject in test_population:
+    for subject in population:
         for day in days:
             for voxel in voxels:
                 zfs_mrs_dir = os.path.join(zfs, subject, day, 'SVS')
