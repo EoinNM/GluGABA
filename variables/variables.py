@@ -1,6 +1,6 @@
 
 zfs = '/data/pt_nro174_mri/MRI/Assessment/A_Steady_State/'
-workspace = '/NOBACKUP2/Molloy/GluGABA/'
+workspace = '/nobackup/roggen2/Molloy/GluGABA'
 days = ['base', 'day1', 'day7']
 voxels = ['ACC', 'M1', 'M1m']
 svs_file = ["TWIX", "RDA"]
