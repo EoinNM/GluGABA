@@ -5,7 +5,7 @@ Created on Tue Apr May 1 2018
 """
 import os
 from os import *
-from variables.varaibles import *
+from variables.variables import *
 from utils.utils import *
 
 
