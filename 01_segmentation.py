@@ -5,16 +5,17 @@ import nipype.interfaces.spm as spm
 def Segment_T1(workspace, population, days):
 
     print '========================================================================================'
-    print ''
     print '                                GluGABA - 01.SEGMENT                                    '
-    print ''
     print '========================================================================================'
-
+    count = 0
     for subject in population:
-        print '-Segmenting for subject %s' % subject
+	count += 1
+	for day in days:
+		
+	    print '========================================================================================'
+    	    print '               %s. Segmenting Anatomical Images for %s, %s' %(count, subject, day)
+            print '========================================================================================'
 
-        for day in days:
-            print '...  day', day
             anatomical_dir = os.path.join(workspace, subject, 'ANATOMICAL', day)
             anatomical_file = os.path.join(anatomical_dir, 'ANATOMICAL.nii')
 
