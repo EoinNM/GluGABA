@@ -38,9 +38,9 @@ def Segment_T1(workspace, population, days):
             os.system('fslmaths %s -add %s -add %s -thr 0.5 -bin brain_mask' % (gm_mask, wm_mask, csf_mask))
 
     	    # threshold binarise indivdiual tissue classes
-            system('fslmaths c1ANATOMICAL.nii -thr 0.5 -bin GM')
-            system('fslmaths c2ANATOMICAL.nii -thr 0.5 -bin WM') 
-            system('fslmaths c3ANATOMICAL.nii -thr 0.5 -bin CSF')      
+            os.system('fslmaths c1ANATOMICAL.nii -thr 0.5 -bin GM')
+            os.system('fslmaths c2ANATOMICAL.nii -thr 0.5 -bin WM') 
+            os.system('fslmaths c3ANATOMICAL.nii -thr 0.5 -bin CSF')      
 
             print 'Now Making Mask for subject %s' % subject
             # create brain mask for GM, WM, CSF
