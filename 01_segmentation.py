@@ -1,21 +1,24 @@
 import os
+from os import *
 from variables.variables import *
 import nipype.interfaces.spm as spm
+import nipype.interfaces.fsl as fsl
 
 def Segment_T1(workspace, population, days):
 
     print '========================================================================================'
-    print '                                GluGABA - 01.SEGMENT                                    '
+    print '                                GluGABA 01_SEGMENT                                    '
     print '========================================================================================'
+
     count = 0
     for subject in population:
-	count += 1
-	for day in days:
-		
-	    print '========================================================================================'
-    	    print '               %s. Segmenting Anatomical Images for %s, %s' %(count, subject, day)
-            print '========================================================================================'
-
+        for day in days:
+            count += 1
+            
+            print '============================================================'
+            print ' %s. Segmenting & Binarising Anatomical Images for %s, %s.'  %(count, subject, day)
+            print '============================================================'
+            
             anatomical_dir = os.path.join(workspace, subject, 'ANATOMICAL', day)
             anatomical_file = os.path.join(anatomical_dir, 'ANATOMICAL.nii')
 
@@ -34,10 +37,10 @@ def Segment_T1(workspace, population, days):
             # threshold/binarise tissue classes to create mask
             os.system('fslmaths %s -add %s -add %s -thr 0.5 -bin brain_mask' % (gm_mask, wm_mask, csf_mask))
 
-	    # save outputs for individual binarised tissue classes
-	    os.system('fslmaths c1ANATOMICAL.nii -thr 0.5 -bin GM')
-	    os.system('fslmaths c2ANATOMICAL.nii -thr 0.5 -bin WM') 
-	    os.system('fslmaths c3ANATOMICAL.nii -thr 0.5 -bin CSF')      
+    	    # threshold binarise indivdiual tissue classes
+            system('fslmaths c1ANATOMICAL.nii -thr 0.5 -bin GM')
+            system('fslmaths c2ANATOMICAL.nii -thr 0.5 -bin WM') 
+            system('fslmaths c3ANATOMICAL.nii -thr 0.5 -bin CSF')      
 
             print 'Now Making Mask for subject %s' % subject
             # create brain mask for GM, WM, CSF
@@ -48,4 +51,4 @@ def Segment_T1(workspace, population, days):
             os.system('fslmaths %s -add %s -add %s -fillh -dilM %s' % (gm_bin, wm_bin, csf_bin, brain_mask))
 
 
-Segment_T1(workspace, population, days)
+Segment_T1(workspace, test_population, days)

@@ -23,7 +23,7 @@ def create_masks(population, workspace, days, voxels):
                 count +=1
             
                 print '============================================================================================'
-                print '                %s. Obtaining RDA geometry and creating voxel mask for %s, %s, %s' %(count, subject, day, voxel)
+                print '                %s. Obtaining RDA Geometry and Creating Binarised Voxel Mask for %s, %s, %s' %(count, subject, day, voxel)
                 print '============================================================================================'    
     
                 #work dir
@@ -39,7 +39,7 @@ def create_masks(population, workspace, days, voxels):
                 mask_dir = os.path.join(sub_dir, subject, 'SVS', day, voxel, 'voxel_masks')
 
                 
-                #MatLab in os.system - BE INSIDE SPM ENVIRONMENT IN TERMINAL
+                #MatLab/SPM in os.system
                 os.system("matlab -nodesktop -nosplash -r \"RDA_TO_NIFTI(\'%s\', \'%s\', \'%s\', \'%s\') ; quit;\"" %(t1Path, t1File, RPath, RFile))
 
                 #move voxel masks from T1 path directory to voxel_mask dir
@@ -50,4 +50,4 @@ def create_masks(population, workspace, days, voxels):
                     elif 'coord' in file:
                         shutil.move(os.path.join(t1Path, file), mask_dir)
 
-create_masks(population, workspace, days, voxels)
+create_masks(test_population, workspace, days, voxels)

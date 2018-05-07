@@ -23,9 +23,9 @@ def check_T1_SVS(population, zfs, workspace, days):
     for subject in population:
         count += 1
 
-        print '========================================================================================'
-        print '-%s. Checking data for subject %s' %(count,subject)
-
+        print '==================================='
+        print ' %s. Checking data for subject %s' %(count,subject)
+        print '==================================='
         for day in days:
             #### I/O
             #  make dirs & def src dir
@@ -99,4 +99,4 @@ def check_T1_SVS(population, zfs, workspace, days):
                 os.system('cp %s %s/%s.rda' % (rda_met_src, rda_met_dst, voxel))
                 os.system('cp %s %s/%s_w.rda' % (rda_h20_src, rda_h20_dst, voxel))
 
-check_T1_SVS(population, zfs, workspace, days)
+check_T1_SVS(test_population, zfs, workspace, days)
