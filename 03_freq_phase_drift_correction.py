@@ -26,7 +26,7 @@ def spectral_registration(workspace, population, days, voxels):
                 print '============================================================================================'
                 
                 #directory
-                twxdata_dir = os.path.join(workspace, 'Test_population', subject,'SVS', day, voxel, 'TWIX',)
+                twxdata_dir = os.path.join(workspace, subject,'SVS', day, voxel, 'TWIX',)
                 
                 #run Jamie Near SVS processing tools in MatLab for each voxel/sequence
                 #change to correct sub dir!

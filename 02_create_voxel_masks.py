@@ -23,11 +23,12 @@ def create_masks(population, workspace, days, voxels):
                 count +=1
             
                 print '============================================================================================'
-                print '                %s. Obtaining RDA Geometry and Creating Binarised Voxel Mask for %s, %s, %s' %(count, subject, day, voxel)
+                print '     %s. Obtaining RDA Geometry and Creating Binarised Voxel Mask for %s, %s, %s' %(count, subject, day, voxel)
                 print '============================================================================================'    
     
                 #work dir
-                sub_dir = os.path.join(workspace, 'population')
+                sub_dir = os.path.join(workspace)
+                
                 #set paths & define files for RDA_TO_NIFTI MatLab script              
                 t1Path = os.path.join(sub_dir, subject, 'ANATOMICAL', day + '/')
                 t1File = "ANATOMICAL.nii"
@@ -37,7 +38,6 @@ def create_masks(population, workspace, days, voxels):
                 #create new output_dir
                 mkdir_path(os.path.join(sub_dir, subject, 'SVS', day, voxel, 'voxel_masks'))
                 mask_dir = os.path.join(sub_dir, subject, 'SVS', day, voxel, 'voxel_masks')
-
                 
                 #MatLab/SPM in os.system
                 os.system("matlab -nodesktop -nosplash -r \"RDA_TO_NIFTI(\'%s\', \'%s\', \'%s\', \'%s\') ; quit;\"" %(t1Path, t1File, RPath, RFile))
