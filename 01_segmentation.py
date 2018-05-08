@@ -15,9 +15,9 @@ def Segment_T1(workspace, population, days):
         for day in days:
             count += 1
             
-            print '============================================================'
-            print ' %s. Segmenting & Binarising Anatomical Images for %s, %s.'  %(count, subject, day)
-            print '============================================================'
+            print '==========================================================================='
+            print ' %s. Segmenting & Binarising Anatomical Images & Tissue Classes for %s, %s.'  %(count, subject, day)
+            print '==========================================================================='
             
             anatomical_dir = os.path.join(workspace, subject, 'ANATOMICAL', day)
             anatomical_file = os.path.join(anatomical_dir, 'ANATOMICAL.nii')
@@ -33,11 +33,17 @@ def Segment_T1(workspace, population, days):
             wm_mask = os.path.join(anatomical_dir, 'c2ANATOMICAL.nii')
             csf_mask = os.path.join(anatomical_dir, 'c3ANATOMICAL.nii')
             
-            print ' Now-Thresholding & Binarising tissue classes for subject %s' % subject
+            print ' Now-Thresholding & Binarising tissue classes & Saving individual Masks for subject %s' % subject
             # threshold/binarise tissue classes to create mask
             os.system('fslmaths %s -add %s -add %s -thr 0.5 -bin brain_mask' % (gm_mask, wm_mask, csf_mask))
+            
+            os.chdir(anatomical_dir)
+            #binarise tissue masks for voxel count calculation - BE IN FSL ENVIRONMENT
+            os.system('fslmaths %s -thr 0.5 -bin GM' % (gm_mask))
+            os.system('fslmaths %s -thr 0.5 -bin WM' % (wm_mask))
+            os.system('fslmaths %s -thr 0.5 -bin CSF' % (csf_mask))
    
-            print 'Now Making Mask for subject %s' % subject
+            print 'Now Making Whole Brain Mask for subject %s' % subject
             # create brain mask for GM, WM, CSF
             gm_bin = os.path.join(anatomical_dir, 'c1ANATOMICAL.nii')
             wm_bin = os.path.join(anatomical_dir, 'c2ANATOMICAL.nii')
