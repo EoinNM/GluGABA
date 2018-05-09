@@ -61,7 +61,6 @@ def calc_partial_vols(population, workspace, voxels, days):
                 svs_wm_percentage = float(total_wm_svs) / float(total_svs)*100
                 svs_csf_percentage = float(total_csf_svs) / float(total_svs)*100
 
-
                 compartmentation_perc = np.array([svs_gm_percentage, svs_wm_percentage, svs_csf_percentage])
                 print compartmentation_perc
 
@@ -74,4 +73,4 @@ def calc_partial_vols(population, workspace, voxels, days):
                 #    file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
                 #    file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
 
-calc_partial_vols(test_population[0:1], workspace, voxels, days)
+calc_partial_vols(test_population, workspace, voxels, days)
