@@ -37,8 +37,8 @@ def Segment_T1(workspace, population, days):
             # threshold/binarise tissue classes to create mask
             os.system('fslmaths %s -add %s -add %s -thr 0.5 -bin brain_mask' % (gm_mask, wm_mask, csf_mask))
             
+            #binarise tissue masks for step 04 voxel count calculation
             os.chdir(anatomical_dir)
-            #binarise individual tissue masks and save outputs in anatomical dir - BE IN FSL ENVIRONMENT
             os.system('fslmaths %s -thr 0.5 -bin GM' % (gm_mask))
             os.system('fslmaths %s -thr 0.5 -bin WM' % (wm_mask))
             os.system('fslmaths %s -thr 0.5 -bin CSF' % (csf_mask))
