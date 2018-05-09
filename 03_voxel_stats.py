@@ -55,7 +55,7 @@ def calc_partial_vols(population, workspace, voxels, days):
                 total_gm_svs = np.sum(total_gm)
                 total_wm_svs = np.sum(total_wm)
                 total_csf_svs = np.sum(total_csf)
-#
+                
                 #calculate percentages of tissue ---> divide by total svs voxel count and output percentage
                 svs_gm_percentage = float(total_gm_svs) / float(total_svs)*100
                 svs_wm_percentage = float(total_wm_svs) / float(total_svs)*100
