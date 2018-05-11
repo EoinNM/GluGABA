@@ -55,22 +55,22 @@ def calc_partial_vols(population, workspace, voxels, days):
                 total_gm_svs = np.sum(total_gm)
                 total_wm_svs = np.sum(total_wm)
                 total_csf_svs = np.sum(total_csf)
-#
+                
                 #calculate percentages of tissue ---> divide by total svs voxel count and output percentage
                 svs_gm_percentage = float(total_gm_svs) / float(total_svs)*100
                 svs_wm_percentage = float(total_wm_svs) / float(total_svs)*100
                 svs_csf_percentage = float(total_csf_svs) / float(total_svs)*100
-
+                
+                #create and save concentrations to numpy array
                 compartmentation_perc = np.array([svs_gm_percentage, svs_wm_percentage, svs_csf_percentage])
                 print compartmentation_perc
-
                 np.save(os.path.join(percent_dir, 'stats.npy'), compartmentation_perc)
 
-                #write percentage to text file
-                # os.chdir(percent_dir)
-                # with open('SVS_Voxel_Tissue_Stats.txt', "ab") as file:
-                #    file.write(b"Grey_Matter_Percentage....."), file.write(b'%f\n' %svs_gm_percentage)
-                #    file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
-                #    file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
+                #also write percentage to text file
+                 os.chdir(percent_dir)
+                 with open('SVS_Voxel_Tissue_Stats.txt', "ab") as file:
+                    file.write(b"Grey_Matter_Percentage....."), file.write(b'%f\n' %svs_gm_percentage)
+                    file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
+                    file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
 
 calc_partial_vols(test_population, workspace, voxels, days)
