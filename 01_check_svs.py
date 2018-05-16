@@ -83,7 +83,7 @@ def check_svs(test_population, days, voxels, PRESS_voxels, workspace, zfs):
                 shutil.move(RDA_PRESS_h20_src, RDA_PRESS_h20_dst)    
                 
                 #TWIX PRESS src
-                for press_met_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*svs_se_%s*' % (se_voxel))):
+                for press_met_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*svs_se_%s_FID*' % (se_voxel))):
                     twx_PRESS_met_src = press_met_dat
                     shutil.move(twx_PRESS_met_src, twx_PRESS_met_dst)
                     
