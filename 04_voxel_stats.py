@@ -74,4 +74,4 @@ def calc_partial_vols(population, workspace, voxels, days):
                     file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
                     file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
 
-calc_partial_vols(test_population[0:1], workspace, voxels, days)
+calc_partial_vols(test_population, workspace, voxels, days)
