@@ -49,13 +49,13 @@ def check_svs(test_population, days, voxels, PRESS_voxels, workspace, zfs):
             print "Cleaning up unneeded zip files"
             os.remove("MRS.zip")
             
-            #rename unzipped file
+#           #rename unzipped file
             print "Now renaming unzipped directory"
             for unzip_file in os.listdir(sub_dir):
                 os.rename(str(os.path.join(sub_dir, unzip_file)),
                           str(os.path.join(sub_dir, 'unzipped_mrs')))
             
-            #copy RDA PRESS data
+            #copy PRESS data
             for se_voxel in PRESS_voxels:
     
                 print "Creating new Locations for MRS data"
@@ -79,38 +79,41 @@ def check_svs(test_population, days, voxels, PRESS_voxels, workspace, zfs):
                 RDA_PRESS_h20_src = os.path.join(sub_dir, 'unzipped_mrs', 'se%sref.rda' %(se_voxel))
                  
                 #copy RDA PRESS
-                shutil.move(RDA_PRESS_met_src, RDA_PRESS_met_dst)
-                shutil.move(RDA_PRESS_h20_src, RDA_PRESS_h20_dst)    
+                os.system('cp %s %s/%s.rda' % (RDA_PRESS_met_src, RDA_PRESS_met_dst, se_voxel))
+                os.system('cp %s %s/%s_w.rda' % (RDA_PRESS_h20_src, RDA_PRESS_h20_dst, se_voxel))
                 
                 #TWIX PRESS src
                 for press_met_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*svs_se_%s_FID*' % (se_voxel))):
                     twx_PRESS_met_src = press_met_dat
-                    shutil.move(twx_PRESS_met_src, twx_PRESS_met_dst)
+                    os.system('cp %s %s/%s.dat' % (twx_PRESS_met_src, twx_PRESS_met_dst, se_voxel))
                     
                 for press_h20_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*svs_se_%s_ref*' % (se_voxel))):
                     twx_PRESS_h20_src = press_h20_dat
-                    shutil.move(twx_PRESS_h20_src, twx_PRESS_h20_dst)
+                    os.system('cp %s %s/%s.dat' % (twx_PRESS_h20_src, twx_PRESS_h20_dst, se_voxel))
 
             print "Moving MEGA-PRESS data to correct location for %s, %s:" %(subject, day)
+
+    	     #copy MPRESS data
 
             #RDA MPRESS src
             RDA_MPRESS_met_src = os.path.join(sub_dir, 'unzipped_mrs', 'mpM1.rda')
             RDA_MPRESS_h20_src = os.path.join(sub_dir, 'unzipped_mrs', 'mpM1ref.rda')
 
             #copy RDA MPRESS
-            shutil.move(RDA_MPRESS_met_src, RDA_MPRESS_met_dst)
-            shutil.move(RDA_MPRESS_h20_src, RDA_MPRESS_h20_dst)
+            os.system('cp %s %s/%s.rda' % (RDA_MPRESS_met_src, RDA_MPRESS_met_dst, se_voxel))
+            os.system('cp %s %s/%s_w.rda' % (RDA_MPRESS_h20_src, RDA_MPRESS_h20_dst, se_voxel))
             
-            #TWIX PRESS src
+            #TWIX MPRESS src
             for mpress_met_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*mpw529_M1_FID*')):
                 twx_MPRESS_met_src = mpress_met_dat
-                shutil.move(twx_MPRESS_met_src, twx_MPRESS_met_dst)
+                os.system('cp %s %s' % (twx_MPRESS_met_src, twx_MPRESS_met_dst))
                 
             for mpress_h20_dat in glob.glob(os.path.join(sub_dir, 'unzipped_mrs', '*mpw529_M1_ref*')):
                 twx_MPRESS_h20_src = mpress_h20_dat
-                shutil.move(twx_MPRESS_h20_src, twx_MPRESS_h20_dst)
+                os.system('cp %s %s' % (twx_MPRESS_h20_src, twx_MPRESS_h20_dst))
             
-            #clean up empty files
+            #clean up unneded duplicates
+            print "Cleaning up unneeded duplicate files"
             os.chdir(sub_dir)
             os.system('rm -rf unzipped_mrs')
 
