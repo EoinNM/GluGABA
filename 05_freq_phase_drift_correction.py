@@ -43,7 +43,7 @@ def spectral_registration(workspace, population, days, voxels):
                 
 
 
-spectral_registration(workspace, ['KCST'], days, voxels)
+spectral_registration(workspace, test_population, days, voxels)
 
                 
                 
