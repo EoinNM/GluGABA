@@ -49,7 +49,7 @@ def check_svs(test_population, days, voxels, PRESS_voxels, workspace, zfs):
             print "Cleaning up unneeded zip files"
             os.remove("MRS.zip")
             
-#           #rename unzipped file
+            #rename unzipped file
             print "Now renaming unzipped directory"
             for unzip_file in os.listdir(sub_dir):
                 os.rename(str(os.path.join(sub_dir, unzip_file)),
@@ -93,7 +93,7 @@ def check_svs(test_population, days, voxels, PRESS_voxels, workspace, zfs):
 
             print "Moving MEGA-PRESS data to correct location for %s, %s:" %(subject, day)
 
-    	     #copy MPRESS data
+    	    #copy MPRESS data
 
             #RDA MPRESS src
             RDA_MPRESS_met_src = os.path.join(sub_dir, 'unzipped_mrs', 'mpM1.rda')
