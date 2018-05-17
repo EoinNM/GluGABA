@@ -7,13 +7,14 @@ import nipype.interfaces.fsl as fsl
 def Segment_T1(workspace, population, days):
 
     print '========================================================================================'
-    print '                                GluGABA 01_SEGMENT                                    '
+    print '                                GluGABA - 02_Segmentation                                    '
     print '========================================================================================'
 
     count = 0
     for subject in population:
-        for day in days:
-            count += 1
+        count += 1
+        
+        for day in days:    
             
             print '==========================================================================='
             print ' %s. Segmenting & Binarising Anatomical Images & Tissue Classes for %s, %s.'  %(count, subject, day)

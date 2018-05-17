@@ -13,15 +13,16 @@ import shutil
 def create_masks(population, workspace, days, voxels):
 
     print '============================================================================================'
-    print '                             GluGABA_02 - Create Voxel Masks                                '
+    print '                             GluGABA -03_Create_Voxel_Masks                                '
     print '============================================================================================'
 
     count = 0
     for subject in population:
+        count +=1
+        
         for day in days:
             for voxel in voxels:
-                count +=1
-            
+                    
                 print '============================================================================================'
                 print '     %s. Obtaining RDA Geometry and Creating Binarised Voxel Mask for %s, %s, %s' %(count, subject, day, voxel)
                 print '============================================================================================'    

@@ -12,14 +12,15 @@ from utils.utils import *
 def spectral_registration(workspace, population, days, voxels):
     
     print '============================================================================================'
-    print '                         GluGABA_03 - Frequency & Phase Drift Correction                    '
+    print '                         GluGABA - 05_Frequency & Phase Drift Correction                    '
     print '============================================================================================'
     
     count = 0
     for subject in population:
+        count +=1
+        
         for day in days:
             for voxel in voxels:
-                count +=1
                 
                 print '============================================================================================'
                 print ' %s. Performing Spectral Registration for Frequency & Phase Drift Correction on %s, %s, %s'  %(count, subject, voxel, day)

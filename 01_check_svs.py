@@ -8,7 +8,7 @@ import glob
 def check_svs(test_population, days, voxels, PRESS_voxels, MPRESS_voxels, workspace, zfs):
     
     print '========================================================================================'
-    print '                                GluGABA - 01 Check SVS                                 '
+    print '                                GluGABA - 01 Check_SVS                                 '
     print '========================================================================================'
     
     count = 0

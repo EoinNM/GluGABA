@@ -12,15 +12,16 @@ import numpy as np
 def calc_partial_vols(population, workspace, voxels, days):
     
     print '================================================================================='
-    print '                      GluGABA_04 - Calculate Patial Volumes                  '
+    print '                      GluGABA - 04_Voxel_Statistics                 '
     print '================================================================================='
             
     count = 0
     for subject in population:
         count += 1
+        
         print '================================================================================='
         print ' %s. Calculating Voxel Tissue Stats for subject %s' %(count, subject)
-
+        print '================================================================================='
         for voxel in voxels:
             for day in days:
 
@@ -68,8 +69,8 @@ def calc_partial_vols(population, workspace, voxels, days):
                 np.save(os.path.join(percent_dir, 'stats.npy'), compartmentation_perc)
 
                 #and write percentage to text file
-                 os.chdir(percent_dir)
-                 with open('SVS_Voxel_Tissue_Stats.txt', "ab") as file:
+                os.chdir(percent_dir)
+                with open('SVS_Voxel_Tissue_Stats.txt', "ab") as file:
                     file.write(b"Grey_Matter_Percentage....."), file.write(b'%f\n' %svs_gm_percentage)
                     file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
                     file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
