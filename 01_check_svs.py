@@ -94,7 +94,7 @@ def check_svs(test_population, days, voxels, PRESS_voxels, MPRESS_voxels, worksp
             for mp_voxel in MPRESS_voxels:
                 print "Moving MEGA-PRESS data to correct location for %s, %s:" %(subject, day)
 
-        	     #copy MPRESS data
+        	    #copy MPRESS data
 
                 #RDA MPRESS src
                 RDA_MPRESS_met_src = os.path.join(sub_dir, 'unzipped_mrs', 'mpM1.rda')
@@ -113,7 +113,7 @@ def check_svs(test_population, days, voxels, PRESS_voxels, MPRESS_voxels, worksp
                     twx_MPRESS_h20_src = mpress_h20_dat
                     os.system('cp %s %s/%s.dat' % (twx_MPRESS_h20_src, twx_MPRESS_h20_dst, mp_voxel))
             
-                #clean up unneded duplicates
+                #clean up uneeded duplicates
                 print "Cleaning up unneeded duplicate files"
                 os.chdir(sub_dir)
                 os.system('rm -rf unzipped_mrs')
