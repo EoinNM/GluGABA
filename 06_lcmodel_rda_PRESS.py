@@ -35,8 +35,7 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 os.system('~/lcmodel/6.3-1L/siemens/bin2raw %s %s/ met' %(rda_met, lcm_dir))
                 os.system('~/lcmodel/6.3-1L/siemens/bin2raw %s %s/ h2o' %(rda_h2o, lcm_dir))
 
-                # LCM control file
-
+                #LCM control file
                 file = open(os.path.join(lcm_dir, 'control'), "w")
                 file.write(" $LCMODL\n")
                 file.write(" srcraw= '%s' \n" % rda_met)
