@@ -20,22 +20,21 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 print '================================================================================'
 
                 subject_dir = os.path.join(workspace, subject)
-                #Input
+                #I/O
                 svs_dir = os.path.join(subject_dir, 'SVS', day, se_voxel, 'RDA')
                 rda_met = os.path.join(svs_dir, '%s' % se_voxel, '%s.rda' % se_voxel)
                 rda_h2o = os.path.join(svs_dir, '%s_w' % se_voxel, '%s_w.rda' % se_voxel)
-
-		#Output
                 lcm_dir = mkdir_path(os.path.join(subject_dir, 'LCMODEL', day, se_voxel, 'RDA', se_voxel))
 
-                #bin2raw
+                # bin2raw
                 mkdir_path(os.path.join(lcm_dir, 'met'))
                 mkdir_path(os.path.join(lcm_dir, 'h2o'))
 
                 os.system('~/lcmodel/6.3-1L/siemens/bin2raw %s %s/ met' %(rda_met, lcm_dir))
                 os.system('~/lcmodel/6.3-1L/siemens/bin2raw %s %s/ h2o' %(rda_h2o, lcm_dir))
 
-                #LCM control file
+                # build control file
+
                 file = open(os.path.join(lcm_dir, 'control'), "w")
                 file.write(" $LCMODL\n")
                 file.write(" srcraw= '%s' \n" % rda_met)
@@ -59,7 +58,6 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 file.write(" filcoo= '%s/coord'\n" % lcm_dir)
                 file.write(" filbas= '/a/software/.lcmodel/6.3-1L/basis-sets/press_te30_3t_01a.basis'\n")
                 file.write(" echot= 30.00 \n")
-                file.write(" NEACH= 999 \n")
                 file.write(" dows= T \n")
                 file.write(" doecc= T\n")
                 file.write(" deltat= 8.330e-04\n")
@@ -70,5 +68,9 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 print 'Running LCModel on RDA Files'
                 os.system('sh /home/raid2/molloy/lcmodel/6.3-1L/execution-scripts/standard %s 30 %s %s' % (lcm_dir, lcm_dir, lcm_dir))
 
-run_lcmodel_rda(population, workspace, PRESS_voxels, days)
+                #create PDF
+                os.chdir(lcm_dir)
+                os.system("ps2pdf ps")
+
+run_lcmodel_rda(test_population, workspace, PRESS_voxels, days)
 
