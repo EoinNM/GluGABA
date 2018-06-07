@@ -70,6 +70,7 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
 
                 #create PDF
                 os.chdir(lcm_dir)
+                print "Converting ps to .pdf for %s, %s, %s" % (subject, se_voxel, day)
                 os.system("ps2pdf ps")
 
 run_lcmodel_rda(test_population, workspace, PRESS_voxels, days)
