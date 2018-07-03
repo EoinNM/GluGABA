@@ -32,11 +32,9 @@ def spectral_registration(workspace, population, days, voxels):
                 
                 #run Jamie Near SVS processing tools in MatLab for each TWIX voxel/sequence
                 #change to correct sub dir!
-                print twxdata_dir
                 os.chdir(twxdata_dir)
-                print os.getcwd()
                 
-                #MATLAB through bash - auto script called
+                #MATLAB through bash - auto scripts called
                 #MATLAB --patch freetype as environment
                 if voxel[-1] != 'm':
                     print 'PRESS'
