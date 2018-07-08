@@ -2,7 +2,7 @@ import os
 from utils.utils import *
 from variables.variables import  *
 
-#You must compute-lcmodel-1 before running
+#You must ssh compute-lcmodel-1 before running
 
 def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
 
