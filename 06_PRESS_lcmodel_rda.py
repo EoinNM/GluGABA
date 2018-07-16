@@ -63,6 +63,7 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 file.write(" filbas= '/a/software/.lcmodel/6.3-1L/basis-sets/press_te30_3t_01a.basis'\n")
                 file.write(" echot= 30.00 \n")
                 file.write(" dows= T \n")
+                file.write(" NEACH= 999 \n")
                 file.write(" doecc= T\n")
                 file.write(" deltat= 8.330e-04\n")
                 file.write(" $END\n")
