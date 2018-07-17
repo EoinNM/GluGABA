@@ -90,9 +90,15 @@ def run_lcmodel_twx(population, workspace, PRESS_voxels, days):
                 print 'Running LCModel on TWIX Files'
                 os.system('sh /home/raid2/molloy/lcmodel/6.3-1L/execution-scripts/standard %s 30 %s %s' % (lcm_dir, lcm_dir, lcm_dir))
                 
-                #create PDF
+                #create & rename PDF
                 os.chdir(lcm_dir)
                 print "Creating pdf output for %s, %s, %s" % (subject, se_voxel, day)
                 os.system("ps2pdf ps")
+                print "Renaming .pdf file output for %s, %s, %s" %(subject, se_voxel, day)
+                for pdf_file in os.listdir(lcm_dir):
+                    if pdf_file.endswith('pdf'):
+                        os.rename(str(os.path.join(lcm_dir, pdf_file)),
+                                  str(os.path.join(lcm_dir, '%s_%s_%s.pdf' %(subject, se_voxel, day))))
+
                 
 run_lcmodel_twx(test_pop, workspace, PRESS_voxels, days)
