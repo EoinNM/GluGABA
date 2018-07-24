@@ -72,7 +72,24 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 #run lcmodel
                 print 'Running LCModel on RDA Files'
                 os.system('sh /home/raid2/molloy/lcmodel/6.3-1L/execution-scripts/standard %s 30 %s %s' % (lcm_dir, lcm_dir, lcm_dir))
+                
+                #create snr.txt file for QA.
+                reader = open(os.path.join(lcm_dir, 'table'), 'r')
+                for line in reader:
+                    if 'FWHM' in line:
+                        fwhm = float(line[9:14])
+                        snrx  = line[29:31]
+                        fwhm_hz = fwhm * 123.24
+                    if 'Data shift' in line:
+                        shift = line[15:21]
+                    if 'Ph:' in line:
+                        ph0 = line[6:10]
+                        ph1 = line[19:24]
 
+                        filex = open(os.path.join(lcm_dir, 'snr.txt'), "w")
+                        filex.write('%s, %s, %s, %s, %s, %s' %(fwhm,fwhm_hz, snrx, shift, ph0, ph1))
+                        filex.close()
+                
                 #create & rename PDF
                 os.chdir(lcm_dir)
                 print "Creating pdf output for %s, %s, %s" % (subject, se_voxel, day)
