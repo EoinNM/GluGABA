@@ -74,7 +74,7 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                 os.system('sh /home/raid2/molloy/lcmodel/6.3-1L/execution-scripts/standard %s 30 %s %s' % (lcm_dir, lcm_dir, lcm_dir))
                 
                 #create snr.txt file for QA.
-                print 'creating some useful .txt files for later :)'
+                print 'creating .txt file with some useful information for later :)'
                 reader = open(os.path.join(lcm_dir, 'table'), 'r')
                 for line in reader:
                     if 'FWHM' in line:

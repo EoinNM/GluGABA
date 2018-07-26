@@ -3,7 +3,7 @@ Created on Tue Apr May 1 2018
 
 @author: eoin
 
-MATLAB --patch freetype
+MATLAB --patch freetype must be set as environment prior to running this script
 """
 import os, sys
 from os import *
@@ -30,18 +30,16 @@ def spectral_registration(workspace, population, days, voxels):
                 #directory
                 twxdata_dir = os.path.join(workspace, subject,'SVS', day, voxel, 'TWIX')
                 
-                #run Jamie Near SVS processing tools in MatLab for each TWIX voxel/sequence
-                #change to correct sub dir!
+                #run Jamie Near SVS processing tools in MatLab for each TWIX voxel/sequence - change to correct sub dir!
                 os.chdir(twxdata_dir)
                 
-                #MATLAB through bash - auto scripts called
-                #MATLAB --patch freetype as environment
+                #MATLAB through bash - auto script called - "MATLAB --patch freetype" as environment must be called
                 if voxel[-1] != 'm':
-                    print 'PRESS'
+                    print 'Processing PRESS data'
                     os.system("matlab -softwareopengl -nodesktop -nosplash -noFigureWindows -r \"run_pressproc_auto(\'%s\');quit;\""%voxel)
                     
                 else: 
-                    print 'MEGA-PRESS'
+                    print 'Processing MEGA-PRESS data'
                     os.system("matlab -softwareopengl -nodesktop -nosplash -noFigureWindows -r \"run_megapressproc_auto(\'M1m\');quit;\"")
 
 spectral_registration(workspace, test_pop, days, voxels)
