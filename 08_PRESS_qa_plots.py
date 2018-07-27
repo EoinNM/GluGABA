@@ -10,9 +10,7 @@ import numpy as np
 from variables.variables import *
 from utils.utils import *
 import shutil
-import subprocess
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm, mm, inch, pica
 
 def plot_qa(population, workspace, PRESS_voxels, days, data_type):
     
