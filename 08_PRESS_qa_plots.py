@@ -10,7 +10,9 @@ import numpy as np
 from variables.variables import *
 from utils.utils import *
 import shutil
+import subprocess
 from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm, mm, inch, pica
 
 def plot_qa(population, workspace, PRESS_voxels, days, data_type):
     
@@ -71,90 +73,88 @@ def plot_qa(population, workspace, PRESS_voxels, days, data_type):
                 acc_data = acc_load.get_data()
                 m1_data = m1_load.get_data()
 
-                #make svs mask zeros into nan
-                acc_data[acc_data==0]=np.nan
-                m1_data[m1_data==0]=np.nan
-
                 #grab snr info from .txt created at steps 06/07
                 ACC_snr = np.genfromtxt(os.path.join(workspace, subject, 'LCMODEL', day, 'ACC', dtype, 'ACC', 'snr.txt'), delimiter = ',')
                 M1_snr = np.genfromtxt(os.path.join(workspace, subject, 'LCMODEL', day, 'M1', dtype, 'M1', 'snr.txt'), delimiter = ',')
                 #grab LCM .png
                 ACC_lcm_plot = os.path.join(workspace, subject, 'QA_Plots', day, 'ACC', dtype, 'LCM_ACC-1.png')
                 M1_lcm_plot = os.path.join(workspace, subject, 'QA_Plots', day, 'M1', dtype, 'LCM_M1-1.png')
-                    
+                
+                #pull cut coords to get center of voxel
+                M1_coords = find_cut_coords(m1_load)
+                ACC_coords = find_cut_coords(acc_load)
+                
+                #make svs mask zeros into nan
+                m1_data[m1_data==0]=np.nan
+                acc_data[acc_data==0]=np.nan
+                
                 fig =plt.figure()
                 fig.set_size_inches(6.5, 6.5)
                 fig.subplots_adjust(wspace=0.005)
                 
                 #plot M1 voxel on T1 & save to .png
-                print '====================================================================='
-                print 'Creating .png file with images of M1 voxel location for %s, %s, %s' % (subject, day, dtype)
-                print '1. Generating M1 Coronal Image'
-                #plot coronal
-                ax1 = plt.subplot2grid((1,3), (0,0), colspan = 1, rowspan = 1)
-                ax1.imshow(np.rot90(T1_data[:, 110, :]), cmap= 'bone', origin='lower')
-                ax1.imshow(np.rot90(m1_data[: ,110, :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
+                print '1. Generating M1 Saggital Image for %s, %s, %s' % (subject, day, dtype)
+                #plot saggital
+                ax1 = plt.subplot2grid((1,3), (0,0), colspan = 1, rowspan =1)
+                ax1.imshow(np.rot90(T1_data[M1_coords[0], :, :]), cmap= 'bone', origin='lower')
+                ax1.imshow(np.rot90(m1_data[M1_coords[0], :, :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
                 ax1.set_xlim(2, 170)
                 ax1.set_ylim(170, 2)
                 ax1.axes.get_yaxis().set_visible(False)
                 ax1.axes.get_xaxis().set_visible(False)
-                print '2. Generating M1 Saggital Image'
-                #plot saggital
+                print '1. Generating M1 Coronal Image for %s, %s, %s' % (subject, day, dtype)
+                #plot coronal
                 ax2 = plt.subplot2grid((1,3), (0,1), colspan = 1, rowspan =1)
-                ax2.imshow(np.rot90(T1_data[55, :, :]), cmap= 'bone', origin='lower')
-                ax2.imshow(np.rot90(m1_data[55, : , :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
+                ax2.imshow(np.rot90(T1_data[:, M1_coords[1], :]), cmap= 'bone', origin='lower')
+                ax2.imshow(np.rot90(m1_data[:, M1_coords[1], :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
                 ax2.set_xlim(2, 170)
                 ax2.set_ylim(170, 2)
                 ax2.axes.get_yaxis().set_visible(False)
                 ax2.axes.get_xaxis().set_visible(False)
-                print '3. Generating M1 Axial Image'
+                print '1. Generating M1 Axial Image for %s, %s, %s' % (subject, day, dtype)
                 #plot axial
                 ax3 = plt.subplot2grid((1,3), (0,2),  colspan = 1, rowspan =1)
-                ax3.imshow(np.rot90(T1_data[: ,:, 203]), cmap= 'bone', origin='lower')
-                ax3.imshow(np.rot90(m1_data[: ,:, 203]) , cmap= 'rainbow', alpha = 0.7, origin='lower')
+                ax3.imshow(np.rot90(T1_data[:, : , M1_coords[2]]), cmap= 'bone', origin='lower')
+                ax3.imshow(np.rot90(m1_data[:, : , M1_coords[2]]) , cmap= 'rainbow', alpha = 0.7, origin='lower')
                 ax3.set_xlim(2, 170)
                 ax3.set_ylim(170, 2)
                 ax3.axes.get_yaxis().set_visible(False)
                 ax3.axes.get_xaxis().set_visible(False)
-                print 'Now Saving M1 Voxel .png file'
                 os.chdir(M1_qa_dir)
                 plt.tight_layout()
                 plt.savefig('Loc_M1', dpi=200, bbox_inches='tight')
                         
                 #plot ACC voxel on T1 and save to .png
-                print 'Creating .png file with images of ACC voxel location for %s, %s, %s' % (subject, day, dtype)
-                print '1. Generating ACC Coronal Image'
-                #plot coronal
+                print '1. Generating ACC Saggital Image for %s, %s, %s' % (subject, day, dtype)
+                #plot saggital
                 ax1 = plt.subplot2grid((1,3), (0,0), colspan = 1, rowspan =1)
-                ax1.imshow(np.rot90(T1_data[: ,156, :]), cmap= 'bone', origin='lower')
-                ax1.imshow(np.rot90(acc_data[: ,156, :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
-                ax1.set_xlim(1, 190)
-                ax1.set_ylim(190, 1)
+                ax1.imshow(np.rot90(T1_data[ACC_coords[0], :, :]), cmap= 'bone', origin='lower')
+                ax1.imshow(np.rot90(acc_data[ACC_coords[0], :, :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
+                ax1.set_xlim(10, 200)
+                ax1.set_ylim(200, 10)
                 ax1.axes.get_yaxis().set_visible(False)
                 ax1.axes.get_xaxis().set_visible(False)
-                print '2. Generating ACC Saggital Image'
-                #plot saggital
+                print '2. Generating ACC Coronal Image for %s, %s, %s' % (subject, day, dtype)
+                #plot coronal
                 ax2 = plt.subplot2grid((1,3), (0,1), colspan = 1, rowspan =1)
-                ax2.imshow(np.rot90(T1_data[90 ,:, :]), cmap= 'bone', origin='lower')
-                ax2.imshow(np.rot90(acc_data[90 ,:, :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
-                ax2.set_xlim(230, 20)
-                ax2.set_ylim(207, 4)
+                ax2.imshow(np.rot90(T1_data[:, ACC_coords[1], :]), cmap= 'bone', origin='lower')
+                ax2.imshow(np.rot90(acc_data[:, ACC_coords[1], :]), cmap= 'rainbow', alpha = 0.7, origin='lower')
+                ax2.set_xlim(10, 200)
+                ax2.set_ylim(200, 10)
                 ax2.axes.get_yaxis().set_visible(False)
                 ax2.axes.get_xaxis().set_visible(False)
-                print '3. Generating ACC Axial Image'
+                print '3. Generating ACC Axial Image for %s, %s, %s' % (subject, day, dtype)
                 #plot axial
                 ax3 = plt.subplot2grid((1,3), (0,2),  colspan = 1, rowspan =1)
-                ax3.imshow(np.rot90(T1_data[: ,:, 180]), cmap= 'bone', origin='lower')
-                ax3.imshow(np.rot90(acc_data[: ,:, 180]) , cmap= 'rainbow', alpha = 0.7, origin='lower')
+                ax3.imshow(np.rot90(T1_data[:, :, ACC_coords[2]]), cmap= 'bone', origin='lower')
+                ax3.imshow(np.rot90(acc_data[:, :, ACC_coords[2]]) , cmap= 'rainbow', alpha = 0.7, origin='lower')
                 ax3.set_xlim(39, 140)
                 ax3.set_ylim(160, 60)
                 ax3.axes.get_yaxis().set_visible(False)
                 ax3.axes.get_xaxis().set_visible(False)
-                print 'Now Saving ACC Voxel .png file'
                 os.chdir(ACC_qa_dir)
                 plt.tight_layout()
                 plt.savefig('Loc_ACC.png', dpi=200, bbox_inches='tight')
-                
                 
                 #########Step 3 - Concatenate all create figures and plots in to a .pdf#################
                 #Create M1 PRESS .pdf
@@ -207,4 +207,4 @@ def plot_qa(population, workspace, PRESS_voxels, days, data_type):
                 else:
                     report.save()       
 
-plot_qa(test_pop, workspace, PRESS_voxels, days, data_type)
+plot_qa(test_pop, workspace, PRESS_voxels, ['base'], data_type)
