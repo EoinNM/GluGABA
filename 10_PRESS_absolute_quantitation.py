@@ -26,10 +26,7 @@ def calc_concentrations(LCM, GM, WM, CSF):
     r_h20_CSF = (1.0 - math.e**(- 3000.0/4163.0)) * math.e**(- 30.0/503.0)
     
     #Gussew compartmentation equation to calculate metabolite concentration via consideration of heterogenous tissue composition
-    chet = (LCM) * (((GM * GM_h2o * r_h20_GM +
-                                       WM * WM_h20 * r_h20_WM +
-                                       CSF * CSF_h20 + r_h20_CSF) /
-                                      (GM *1.0 + WM +1.0))) * h20_factor
+    chet = (LCM) * (((GM * GM_h2o * r_h20_GM + WM * WM_h20 * r_h20_WM + CSF * CSF_h20 + r_h20_CSF) / (GM *1.0 + WM +1.0))) * h20_factor
     
     return chet
     
