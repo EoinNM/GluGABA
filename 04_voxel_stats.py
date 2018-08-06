@@ -59,7 +59,7 @@ def calc_partial_vols(population, workspace, voxels, days):
                 svs_csf_percentage = np.round(float(total_csf_svs) / float(total_svs)*100)
                 total_svs          = np.round(float(svs_gm_percentage + svs_wm_percentage + svs_csf_percentage)*100)
 
-                compartmentation_perc = np.array([svs_gm_percentage, svs_wm_percentage, svs_csf_percentage])
+                compartmentation_perc = np.array([svs_gm_percentage, svs_wm_percentage, svs_csf_percentage, total_svs])
                 print compartmentation_perc
 		
 		#save to numpy array...
