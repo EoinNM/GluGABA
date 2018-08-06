@@ -49,6 +49,7 @@ def Segment_T1(workspace, population, days):
             wm_bin = os.path.join(anatomical_dir, 'c2ANATOMICAL.nii')
             csf_bin = os.path.join(anatomical_dir, 'c3ANATOMICAL.nii')
             brain_mask = os.path.join(anatomical_dir, 'brain_mask.nii')
+            #add binned masks with fslmaths spatial resolution parameters
             os.system('fslmaths %s -add %s -add %s -fillh -dilM %s' % (gm_bin, wm_bin, csf_bin, brain_mask))
 
 
