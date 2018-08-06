@@ -19,11 +19,11 @@ def run_lcmodel_twx(population, workspace, PRESS_voxels, days):
         for day in days:
             for se_voxel in PRESS_voxels:
                 
-                print '================================================================================'
-                print ' %s. Running LCMODEL quantitation for PRESS TWIX data for %s, %s, %s' % (count, subject, se_voxel, day)
-                print '================================================================================'
+                print '============================================================================='
+                print ' %s. Running LCMODEL quantitation on PRESS TWIX data for %s, %s, %s' % (count, subject, se_voxel, day)
+                print '============================================================================='
                 
-                subject_dir = os.path.join(workspace, subject)
+                subject_dir = os.path.join(workspace, 'DATA', subject)
                 #I/O
                 svs_dir = os.path.join(subject_dir, 'SVS', day, se_voxel, 'TWIX')
                 twix_met = os.path.join(svs_dir, '%s' % se_voxel, '%s_lcm' % se_voxel)
@@ -87,11 +87,11 @@ def run_lcmodel_twx(population, workspace, PRESS_voxels, days):
                 file.close()
                 
                 #run lcmodel
-                print 'Running LCModel on TWIX Files'
+                print 'Running LCModel Now'
                 os.system('sh /home/raid2/molloy/lcmodel/6.3-1L/execution-scripts/standard %s 30 %s %s' % (lcm_dir, lcm_dir, lcm_dir))
                 
                 #create snr.txt file for QA.
-                print 'creating .txt file with some useful information for later :)'
+                print 'Now creating .txt file with some useful information for later :)'
                 reader = open(os.path.join(lcm_dir, 'table'), 'r')
                 for line in reader:
                     if 'FWHM' in line:
@@ -118,4 +118,4 @@ def run_lcmodel_twx(population, workspace, PRESS_voxels, days):
                         os.rename(str(os.path.join(lcm_dir, pdf_file)),
                                   str(os.path.join(lcm_dir, '%s_%s_%s.pdf' %(subject, se_voxel, day))))
                         
-run_lcmodel_twx(test_pop, workspace, PRESS_voxels, days)
+run_lcmodel_twx(population, workspace, PRESS_voxels, days)
