@@ -1,8 +1,3 @@
-"""
-Created on Wed May  2 14:51:02 2018
-
-@author: molloy
-"""
 import os
 from variables.variables import *
 from utils.utils import *
@@ -12,27 +7,28 @@ import numpy as np
 def calc_partial_vols(population, workspace, voxels, days):
     
     print '================================================================================='
-    print '                      GluGABA - 04_Voxel_Statistics                 '
+    print '                      GluGABA - 04_Voxel_Statistics                 		    '
     print '================================================================================='
             
     count = 0
     for subject in population:
         count += 1
         
-        print '================================================================================='
+        print '=========================================================================='
         print ' %s. Calculating Voxel Tissue Stats for subject %s' %(count, subject)
-        print '================================================================================='
+        print '=========================================================================='
         for voxel in voxels:
             for day in days:
 
                 print '.... %s -- %s' %(voxel, day)
-
-                seg_dir = os.path.join(workspace, subject, 'ANATOMICAL', day)
-                svs_dir = os.path.join(workspace, subject, 'SVS', day, voxel, 'voxel_masks')
+		
+		#Input
+                seg_dir = os.path.join(workspace, 'DATA', subject, 'ANATOMICAL', day)
+                svs_dir = os.path.join(workspace, 'DATA', subject, 'SVS', day, voxel, 'voxel_masks')
                 
                 #Output
-                mkdir_path(os.path.join(workspace, subject, 'SVS', day, voxel, 'voxel_stats'))
-                percent_dir = os.path.join(workspace, subject, 'SVS', day, voxel, 'voxel_stats')
+                mkdir_path(os.path.join(workspace, 'DATA', subject, 'SVS', day, voxel, 'voxel_stats'))
+                percent_dir = os.path.join(workspace, 'DATA', subject, 'SVS', day, voxel, 'voxel_stats')
                 
                 #load binarised masks & SVS mask
                 gm_mask = os.path.join(seg_dir, 'GM.nii.gz')
@@ -56,23 +52,25 @@ def calc_partial_vols(population, workspace, voxels, days):
                 total_gm_svs = np.sum(total_gm)
                 total_wm_svs = np.sum(total_wm)
                 total_csf_svs = np.sum(total_csf)
-#
-                #calculate percentages of tissue ---> divide by total svs voxel count and output percentage
-                svs_gm_percentage = float(total_gm_svs) / float(total_svs)*100
-                svs_wm_percentage = float(total_wm_svs) / float(total_svs)*100
-                svs_csf_percentage = float(total_csf_svs) / float(total_svs)*100
 
+                #calculate percentages of tissue ---> divide by total svs voxel count and output percentage
+                svs_gm_percentage  = np.round(float(total_gm_svs) / float(total_svs)*100)
+                svs_wm_percentage  = np.round(float(total_wm_svs) / float(total_svs)*100)
+                svs_csf_percentage = np.round(float(total_csf_svs) / float(total_svs)*100)
+                total_svs          = np.round(float(svs_gm_percentage + svs_wm_percentage + svs_csf_percentage)*100)
 
                 compartmentation_perc = np.array([svs_gm_percentage, svs_wm_percentage, svs_csf_percentage])
                 print compartmentation_perc
-
+		
+		#save to numpy array...
                 np.save(os.path.join(percent_dir, 'stats.npy'), compartmentation_perc)
 
-                #and write percentage to text file
+                #...and write percentage to text file
                 os.chdir(percent_dir)
                 with open('SVS_Voxel_Tissue_Stats.txt', "ab") as file:
                     file.write(b"Grey_Matter_Percentage....."), file.write(b'%f\n' %svs_gm_percentage)
                     file.write(b"White_Matter_Percentage...."), file.write(b'%f\n' %svs_wm_percentage)
                     file.write(b"CSF_percentage............."), file.write(b'%f\n' %svs_csf_percentage)
+                    file.write(b"Total_....................."), file.write(b'&f\n' %total_svs)
 
-calc_partial_vols(test_population, workspace, voxels, days)
+calc_partial_vols(population, workspace, voxels, days)
