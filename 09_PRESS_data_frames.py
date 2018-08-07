@@ -16,13 +16,15 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
     for subject in population:
         count += 1
         
+        print '================================================='
+        print '%s. Creating Data Frames now for %s' %(count, subject)
+        print' ================================================='
+        
         #1. Get information
         
         #pull demographics from rda file header
-        print '==================================================================='
-        print '%s. Reading demographics from rda file header %s' %(count, subject)
-        print' ==================================================================='
         
+        print '%s. Reading demographics from rda file header %s' %(count, subject)
         rda  = open(os.path.join(workspace, 'DATA', subject, 'SVS', 'base', 'ACC', 'RDA', 'ACC', 'ACC.rda')).read().splitlines()
         age = [i[13:15] for i in rda if 'PatientAge' in i][0]
         kg   = [i[15:17] for i in rda if 'PatientWeight' in i][0]
