@@ -48,7 +48,7 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
                     #2. Create DataFrame
                     
                     #define column headers
-                    columns = ['Age' ,  'WeightKG', 'FWHM'  , 'SNR'  , 'Shift', 'Ph0', 'Ph1', 'GM', 'WM', 'CSF', 'Brain',
+                    columns = ['Age' ,  'WeightKG', 'FWHM'  , 'SNR'  , 'Shift', 'Ph0', 'Ph1', 'GM', 'WM', 'CSF',
                                         'Cre'    ,  'Cre%'      ,
                                         'tCho'   , 'tCho%'      ,
                                         'NAA'    ,  'NAA%'      ,
