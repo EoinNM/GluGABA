@@ -10,8 +10,8 @@ print '=========================================================================
 
 def calc_concentrations(LCM, GM, WM, CSF):
     
-    
-    #Define equation for absolute quantitation
+    #Define Gussew equation for absolute quantitation
+
     #Relaxation related signal attenuation water factor 
     h20_factor = (55.55 / (35.88 * 0.7))
 
@@ -20,7 +20,7 @@ def calc_concentrations(LCM, GM, WM, CSF):
     WM_h20  = 0.71
     CSF_h20 = 1.00
     
-    #H2O attenuation via differential h20 relaxation times for T1 & T2 with sequence TR & TE and Euler's constant as input variables
+    #H2O attenuation via differential h20 relaxation times for T1 & T2 with sequence TR & TE and Euler's number as input variables
     r_h20_GM  = (1.0 - math.e**(- 3000.0/1820.0)) * math.e**(- 30.0/99.0)
     r_h20_WM  = (1.0 - math.e**(- 3000.0/1084.0)) * math.e**(- 30.0/69.0)
     r_h20_CSF = (1.0 - math.e**(- 3000.0/4163.0)) * math.e**(- 30.0/503.0)
@@ -29,8 +29,6 @@ def calc_concentrations(LCM, GM, WM, CSF):
     chet = (LCM) * (((GM * GM_h2o * r_h20_GM + WM * WM_h20 * r_h20_WM + CSF * CSF_h20 + r_h20_CSF) / (GM *1.0 + WM +1.0))) * h20_factor
     
     return chet
-    
-##################################################################################################################################
     
 #make a dataframe for absolute metabolite quantities
     
@@ -41,7 +39,7 @@ def make_frame(PRESS_voxels, data_type, days):
         for day in days:
             for dtype in data_type:
                 
-                csv = os.path.join(workspace, '00Results', 'PRESS', se_voxel, day, '%s_%s_%s.csv'%(se_voxel, day, dtype))
+                csv = (os.path.join(workspace, 'Results', 'PRESS', 'LCMODEL', se_voxel, day, '%s_%s_%s.csv'%(se_voxel, day, dtype)))
                 df = pd.read_csv(csv, index_col = 0)
                 
                 df.Cre      = calc_concentrations(df.Cre, df.GM, df.WM, df.CSF)
@@ -63,7 +61,7 @@ def make_frame(PRESS_voxels, data_type, days):
                 df.Ala      = calc_concentrations(df.Ala, df.GM, df.WM, df.CSF)
                 df.Scy      = calc_concentrations(df.Scy, df.GM, df.WM, df.CSF)
                 
-                absolute_dir = mkdir_path(os.path.join(workspace, '00Results', 'PRESS', 'Absolute', se_voxel, day))
+                absolute_dir = mkdir_path(os.path.join(workspace, 'Results', 'PRESS', 'ABSOLUTE', se_voxel, day))
                 df.to_csv(os.path.join(absolute_dir, '%s_%s_%s.csv'%(se_voxel, day, dtype)))
                 print 'Absolute DataFrame created for %s_%s_%s'%(se_voxel, day, dtype)
 
