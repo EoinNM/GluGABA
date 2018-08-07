@@ -13,14 +13,17 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
     df_group = []
     
     count = 0
-    for subject in test_pop:
+    for subject in population:
         count += 1
         
         #1. Get information
         
         #pull demographics from rda file header
-        print 'Reading demographics from rda file header %s. %s' %(count, subject)
-        rda  = open(os.path.join(workspace, subject, 'SVS', 'base', 'ACC', 'RDA', 'ACC', 'ACC.rda')).read().splitlines()
+        print '==================================================================='
+        print '%s. Reading demographics from rda file header %s' %(count, subject)
+        print' ==================================================================='
+        
+        rda  = open(os.path.join(workspace, 'DATA', subject, 'SVS', 'base', 'ACC', 'RDA', 'ACC', 'ACC.rda')).read().splitlines()
         age = [i[13:15] for i in rda if 'PatientAge' in i][0]
         kg   = [i[15:17] for i in rda if 'PatientWeight' in i][0]
         
@@ -28,20 +31,17 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
             for se_voxel in PRESS_voxels:
                     
                 #grab voxel composition stats
-                voxel_comp_file = open(os.path.join(workspace, subject, 'SVS', day, se_voxel, 'voxel_stats', 'SVS_Voxel_Tissue_Stats.txt')).read().splitlines()
+                voxel_comp_file = open(os.path.join(workspace, 'DATA', subject, 'SVS', day, se_voxel, 'voxel_stats', 'SVS_Voxel_Tissue_Stats.txt')).read().splitlines()
                 GM      = [i[27:35] for i in voxel_comp_file if 'Grey_Matter_Percentage' in i][0]
                 WM      = [i[27:35] for i in voxel_comp_file if 'White_Matter_Percentage' in i][0]
                 CSF     = [i[27:34] for i in voxel_comp_file if 'CSF_percentage' in i][0]
-                #Total   = 
                 
                 for dtype in data_type:
                     #pull data quality measures
-                    quality = np.genfromtxt(os.path.join(workspace, subject, 'LCMODEL', day, se_voxel, dtype, se_voxel, 'snr.txt'), delimiter = ',')
+                    quality = np.genfromtxt(os.path.join(workspace, 'DATA', subject, 'LCMODEL', day, se_voxel, dtype, se_voxel, 'snr.txt'), delimiter = ',')
                     #get metabolites from LCModel output .csv spreadsheet
-                    csv = pd.read_csv(os.path.join(workspace, subject, 'LCMODEL', day, se_voxel, dtype, se_voxel, 'spreadsheet.csv'))
-                    print 'Finished reading demographics, tissue concentrations, data quality and LCModel .csv information for %s. %s, %s, %s, %s' %(count, subject, se_voxel, dtype, day)
-
-        ##################################################################################################################################################################################        
+                    csv = pd.read_csv(os.path.join(workspace, 'DATA', subject, 'LCMODEL', day, se_voxel, dtype, se_voxel, 'spreadsheet.csv'))
+                    print 'Finished reading demographics, tissue concentrations, data quality and LCModel .csv information for %s. %s, %s, %s, %s' %(count, subject, se_voxel, dtype, day)      
         
                     #2. Create DataFrame
                     
@@ -78,7 +78,6 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
                                                              'GM'           :GM,
                                                              'WM'           :WM,
                                                              'CSF'          :CSF,
-                                                             #'Total_Brain'  :Total
                                                              'Cre'         : float(csv[' Cre']),         'Cre%'        : float(csv[' Cre %SD']),
                                                              'tCho'        : float(csv[' GPC+PCh']),     'tCho%'       : float(csv[' GPC+PCh %SD']),
                                                              'tNAA'        : float(csv[' NAA+NAAG']),    'tNAA%'       : float(csv[' NAA+NAAG %SD']),
@@ -100,26 +99,26 @@ def concatenate(workspace, PRESS_voxels, population, data_type, days):
                                                             })
 
         df_group.append(df_subject)
-    
+        print 'Concatenating data frames.....'
         dataframe = pd.concat(df_group, ignore_index = False).sort(columns='Age')
                                      
-        #save new dataframe with all information in new location
-        mkdir_path(os.path.join(workspace, '00Results', 'PRESS', 'LCMODEL' se_voxel, day))
-        dataframe.to_csv(os.path.join(workspace, '00Results', 'PRESS', se_voxel, day, '%s_%s_%s.csv'%(se_voxel, day, dtype)))
-        print 'Go to Results directory to view dataframes'
+        #3. Save new dataframe with all information in new location
+        dataframe_dir = mkdir_path(os.path.join(workspace, 'Results', 'PRESS', 'LCMODEL', se_voxel, day))
+        dataframe.to_csv(os.path.join(dataframe_dir, '%s_%s_%s.csv'%(se_voxel, day, dtype)))
+        print '.....concatenation complete - go to Results dir to view'
                        
-concatenate(workspace, ['M1'], test_pop, ['RDA'], ['base'])
-concatenate(workspace, ['M1'], test_pop, ['RDA'], ['day1'])
-concatenate(workspace, ['M1'], test_pop, ['RDA'], ['day7'])
+concatenate(workspace, ['M1'], population, ['RDA'], ['base'])
+concatenate(workspace, ['M1'], population, ['RDA'], ['day1'])
+concatenate(workspace, ['M1'], population, ['RDA'], ['day7'])
 
-concatenate(workspace, ['M1'], test_pop, ['TWIX'], ['base'])
-concatenate(workspace, ['M1'], test_pop, ['TWIX'], ['day1'])
-concatenate(workspace, ['M1'], test_pop, ['TWIX'], ['day7'])
+concatenate(workspace, ['M1'], population, ['TWIX'], ['base'])
+concatenate(workspace, ['M1'], population, ['TWIX'], ['day1'])
+concatenate(workspace, ['M1'], population, ['TWIX'], ['day7'])
 
-concatenate(workspace, ['ACC'], test_pop, ['RDA'], ['base'])
-concatenate(workspace, ['ACC'], test_pop, ['RDA'], ['day1'])
-concatenate(workspace, ['ACC'], test_pop, ['RDA'], ['day7'])
+concatenate(workspace, ['ACC'], population, ['RDA'], ['base'])
+concatenate(workspace, ['ACC'], population, ['RDA'], ['day1'])
+concatenate(workspace, ['ACC'], population, ['RDA'], ['day7'])
 
-concatenate(workspace, ['ACC'], test_pop, ['TWIX'], ['base'])
-concatenate(workspace, ['ACC'], test_pop, ['TWIX'], ['day1'])
-concatenate(workspace, ['ACC'], test_pop, ['TWIX'], ['day7'])
+concatenate(workspace, ['ACC'], population, ['TWIX'], ['base'])
+concatenate(workspace, ['ACC'], population, ['TWIX'], ['day1'])
+concatenate(workspace, ['ACC'], population, ['TWIX'], ['day7'])
