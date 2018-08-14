@@ -67,5 +67,18 @@ def pull_T1(population, zfs, workspace, days):
 
             else:
                 print '...... MPRAGE already converted'
+                
+        print 'Now copy and rename the prescan data in new sub_dir - data already in .nii format :)'
+        for images in glob.glob(os.path.join(zfs, subject, 'pres', 'NII', 'DICOM_MPRAGE_*3.nii')):
+            src = images
+            dst = mkdir_path(os.path.join(workspace, 'DATA', subject, 'ANATOMICAL', 'pres'))
+            #copy to new anat_dir
+            shutil.copy(src, dst)
+            os.chdir(dst)
+            #rename the data
+        for nifti in os.listdir(dst):
+                if nifti.endswith('nii'):
+                    os.rename(str(os.path.join(dst, nifti)),
+                        str(os.path.join(dst, 'PRES.nii')))
 
 pull_T1(population, zfs, workspace, days)
