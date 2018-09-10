@@ -99,5 +99,5 @@ def run_lcmodel_rda(population, workspace, PRESS_voxels, days):
                         os.rename(str(os.path.join(lcm_dir, pdf_file)),
                                   str(os.path.join(lcm_dir, '%s_%s_%s.pdf' %(subject, se_voxel, day))))
 
-run_lcmodel_rda(['AL3T'], workspace, PRESS_voxels, ['base'])
+run_lcmodel_rda(population, workspace, PRESS_voxels, days)
 
